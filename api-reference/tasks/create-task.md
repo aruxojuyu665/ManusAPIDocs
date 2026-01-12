@@ -129,15 +129,27 @@ paths:
                 allOf:
                   - type: string
                     enum:
-                      - manus-1.5
-                      - manus-1.5-lite
-                      - speed
-                      - quality
+                      - manus-1.6
+                      - manus-1.6-lite
+                      - manus-1.6-max
                     title: agent_profile
                     description: >-
-                      manus-1.5, manus-1.5-lite, speed (deprecated, use
-                      manus-1.5-lite), or quality (deprecated, use manus-1.5)
-                    default: manus-1.5
+                      Agent model to use: manus-1.6 (default), manus-1.6-lite, or manus-1.6-max
+                    default: manus-1.6
+              projectId:
+                allOf:
+                  - type: string
+                    title: project_id
+                    description: >-
+                      Project ID to associate with this task. When set, the project's
+                      default instruction will be applied to the task.
+              interactiveMode:
+                allOf:
+                  - type: boolean
+                    title: interactive_mode
+                    description: >-
+                      Allow Manus to ask follow-up questions when the input is
+                      insufficient to complete the task.
               locale:
                 allOf:
                   - type: string
@@ -152,12 +164,12 @@ paths:
             additionalProperties: false
             example:
               prompt: Write a function to calculate fibonacci numbers
-              agentProfile: manus-1.5
+              agentProfile: manus-1.6
         examples:
           example:
             value:
               prompt: Write a function to calculate fibonacci numbers
-              agentProfile: manus-1.5
+              agentProfile: manus-1.6
   response:
     '200':
       application/json:

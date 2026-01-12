@@ -15,6 +15,9 @@ ManusAPIDocs/
 │   ├── overview.md                    # Webhooks introduction
 │   └── security.md                    # Webhook security and signature verification
 ├── api-reference/                     # API endpoints reference
+│   ├── projects/                      # Project management endpoints
+│   │   ├── create-project.md          # POST /v1/projects
+│   │   └── list-projects.md           # GET /v1/projects
 │   ├── tasks/                         # Task management endpoints
 │   │   ├── create-task.md             # POST /v1/tasks
 │   │   ├── get-tasks.md               # GET /v1/tasks
@@ -36,9 +39,11 @@ ManusAPIDocs/
 │   ├── gmail.md                       # Gmail connector
 │   ├── notion.md                      # Notion connector
 │   └── google-calendar.md             # Google Calendar connector
-└── integrations/                      # Integrations documentation
-    ├── overview.md                    # Integrations overview
-    └── slack.md                       # Slack integration
+├── integrations/                      # Integrations documentation
+│   ├── overview.md                    # Integrations overview
+│   └── slack.md                       # Slack integration
+└── data-integrations/                 # Data integrations documentation
+    └── overview.md                    # Data integrations overview
 ```
 
 ## Documentation Categories
@@ -51,6 +56,7 @@ Real-time notifications for task lifecycle events, including security best pract
 
 ### API Reference
 Complete API endpoint specifications organized by resource type:
+- **Projects**: Create and manage projects to organize tasks with consistent instructions
 - **Tasks**: Create, retrieve, update, and delete AI tasks
 - **Files**: Manage file uploads and downloads
 - **Webhooks**: Register and manage webhook endpoints
@@ -64,8 +70,11 @@ Documentation for connecting Manus with external services like Gmail, Notion, an
 ### Integrations
 Guides for integrating Manus into platforms like Slack.
 
+### Data Integrations
+Access premium third-party data sources through Manus without manual API key management.
+
 ## Source
 
 All documentation is sourced from the official Manus API documentation at https://open.manus.ai/docs/
 
-Last updated: November 16, 2025
+Last updated: January 12, 2026
