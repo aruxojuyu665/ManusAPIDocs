@@ -1,34 +1,20 @@
-# Overview
+# Integrations — Overview
 
-Integrations let you use Manus directly inside popular third-party tools, so you can work with Manus seamlessly in the environments you already rely on.
+Integrations bring Manus into your existing workflow tools. Instead of switching to the Manus app, you can create tasks, receive notifications, and interact with Manus directly from platforms like Slack, Zapier, and more.
 
-## Popular integrations
+**Use cases:**
 
-<CardGroup cols={1}>
-  <Card href="/integrations/slack">
-    <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-      <img src="https://cdn.simpleicons.org/slack/4A154B" alt="Slack" width="32" height="32" />
+- Start Manus tasks from Slack channels or direct messages
+- Receive task completion notifications in Slack
+- Trigger Manus workflows from Zapier automations
 
-      <div>
-        <strong>Slack</strong><br />
-        Start sessions directly from Slack channels or DM the Manus bot
-      </div>
-    </div>
-  </Card>
+## Popular Integrations
 
-  <Card href="/integrations/zapier">
-    <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-      <img src="https://cdn.simpleicons.org/zapier/FF4F00" alt="Zapier" width="32" height="32" />
-
-      <div>
-        <strong>Zapier</strong><br />
-        Add Manus as a step in your Zapier workflows
-      </div>
-    </div>
-  </Card>
-</CardGroup>
+| Integration | Description |
+|---|---|
+| [Slack](slack.md) | Start sessions directly from Slack channels or DM the Manus bot |
+| Zapier | Add Manus as a step in your Zapier workflows |
 
 ## Setup
 
-Integrations can be configured from your Manus workspace settings.
-Use OAuth for secure authorization.
+To set up integrations, go to **Manus Settings → Integrations** in the Manus webapp and follow the instructions for each platform.

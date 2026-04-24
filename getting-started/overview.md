@@ -1,43 +1,62 @@
-# 
+# Introduction
 
-**URL:** https://open.manus.ai/docs/.md
+> **You are viewing API v2** — the latest version of the Manus API. API v1 has been deprecated and will be removed in the future.
 
----
+## Manus API
 
-# Overview
+The Manus API allows you to programmatically create and manage AI agent tasks. Build automations, orchestrate multi-step workflows, and integrate Manus into your applications through a simple REST API.
 
-# Manus API Documentation
+Before making API calls, you'll need to create an API key. Head over to [Authentication](authentication.md) to get started.
 
-The Manus Integrations API allows developers to seamlessly integrate Manus as a complete AI agent into their workflows.
+## What You Can Do
 
-<Card title="Quickstart Guide" horizontal icon="book" href="/quickstart">
-  Getting started is simple and fast—make your first API call within minutes.
-</Card>
+| Feature | Description |
+|---|---|
+| **Tasks** | Create tasks, send follow-up messages, and retrieve results — full multi-turn conversation support |
+| **Projects** | Organize tasks with shared instructions that apply automatically |
+| **Files** | Upload files as task attachments — PDFs, images, CSVs, and more |
+| **Webhooks** | Get real-time notifications when tasks complete or need input |
+| **Skills** | Extend agent capabilities with built-in and custom skills |
+| **Agents** | Manage and configure your custom agents |
 
-## Available APIs
+## Base URL
 
-<CardGroup cols={1}>
-  <Card title="POST /v1/tasks" href="/api-reference/create-task">
-    Create a new AI task with custom parameters and attachments
-  </Card>
+All API requests are made to:
 
-  <Card title="POST /v1/webhooks" href="/api-reference/create-webhook">
-    Register a webhook to receive real-time notifications
-  </Card>
+```
+https://api.manus.ai
+```
 
-  <Card title="DELETE /v1/webhooks/{webhook_id}" href="/api-reference/delete-webhook">
-    Remove a previously registered webhook
-  </Card>
-</CardGroup>
+## Response Format
 
-## Start Building
+All responses use a consistent wrapper:
 
-<CardGroup>
-  <Card title="API Reference" icon="code" href="/api-reference/create-task">
-    View the complete API documentation with detailed endpoint specifications.
-  </Card>
+**Success:**
+```json
+{
+  "ok": true,
+  "request_id": "req_abc123",
+  ...
+}
+```
 
-  <Card title="Webhooks" icon="bell" href="/webhooks/introduction">
-    Get real-time notifications for task lifecycle events.
-  </Card>
-</CardGroup>
+**Error:**
+```json
+{
+  "ok": false,
+  "request_id": "req_abc123",
+  "error": {
+    "code": "invalid_argument",
+    "message": "task_id is required"
+  }
+}
+```
+
+## Error Codes
+
+| Error Code | Description |
+|---|---|
+| `invalid_argument` | Missing or invalid request parameters |
+| `not_found` | The requested resource does not exist |
+| `permission_denied` | API key lacks permission for this action |
+| `rate_limited` | Too many requests — see [Rate Limits](rate-limits.md) for per-endpoint limits and backoff guidance |

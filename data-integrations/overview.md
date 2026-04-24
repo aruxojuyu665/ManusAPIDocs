@@ -1,26 +1,30 @@
-# Data Integrations
+# Data Integrations — Overview
 
-> Access premium third-party data sources through Manus
+Data Sources give you access to premium third-party data built into Manus. These sources let you enrich tasks with real-time information from external platforms — without managing API keys, credentials, or integrations.
 
-## Overview
+## How to Use Data Integration
 
-Data Integrations in Manus provide access to premium third-party data sources without requiring manual API key management. Users can enrich tasks with real-time information from external platforms through built-in integrations.
-
-## How It Works
-
-Simply describe the data you need in your prompt, and Manus will automatically select and use the appropriate data source. No additional configuration is required.
+Simply describe the data you need in your prompt, and Manus will automatically select and use the appropriate data source.
 
 ## Use Cases
 
-* **Market Research**: Gather competitive intelligence from social media, company profiles, and financial information
-* **Investment Analysis**: Examine stock performance, SEC filings, and market insights for decision-making
-* **Content Discovery**: Find and analyze trending content across YouTube and TikTok
-* **Economic Research**: Access global economic indicators and macroeconomic datasets
+| Use Case | Description |
+|---|---|
+| **Market Research** | Gather competitive intelligence from social media, company profiles, and financial data. |
+| **Investment Analysis** | Analyze stock performance, SEC filings, and market insights for informed decisions. |
+| **Content Discovery** | Find and analyze trending content across YouTube and TikTok. |
+| **Economic Research** | Access global economic indicators and macroeconomic data for research. |
 
-## Important Notes
+## Available Data Sources
 
-- All data sources are bundled with Manus subscriptions at no additional cost
-- No API key setup or credential management is required
-- Manus automatically handles API calls and data caching for optimal performance
-- Data availability and rate limits vary by provider
-- Users should verify critical information from official sources, as third-party data is subject to each provider's terms of service and freshness policies
+| Source | Description |
+|---|---|
+| [Similarweb](similarweb.md) | Website traffic and digital market intelligence data |
+
+## Notes
+
+All data sources are included with your Manus subscription. No additional API keys or setup required.
+
+Data availability and rate limits vary by provider and may be subject to additional restrictions. Manus automatically handles API calls and caching for optimal performance.
+
+Data from third-party sources is subject to their terms of service and data freshness policies. Always verify critical information from official sources.

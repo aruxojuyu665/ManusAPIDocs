@@ -1,121 +1,141 @@
-# Overview
+# Connectors
 
-> Integrating Manus with other tools and services
-
-export const ConnectorTable = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [copiedUuid, setCopiedUuid] = useState(null);
-  const connectorPages = {
-    'Gmail': '/connectors/gmail',
-    'Google Calendar': '/connectors/google-calendar',
-    'Notion': '/connectors/notion'
-  };
-  useEffect(() => {
-    const fetchConnectors = async () => {
-      try {
-        const response = await fetch('https://api.manus.im/connectors.v1.ConnectorsPublicService/PublicListConnectors', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            offset: 0,
-            limit: 100
-          })
-        });
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setData({
-          error: error.message
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchConnectors();
-  }, []);
-  if (loading) return null;
-  if (!data || !data.connectors) {
-    return null;
-  }
-  const copyToClipboard = async text => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedUuid(text);
-      setTimeout(() => setCopiedUuid(null), 2000);
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
-  };
-  return <div className="w-full">
-      <div className="grid grid-cols-2 gap-4 border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">
-        <div className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          Connector Name
-        </div>
-        <div className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          UUID
-        </div>
-      </div>
-      <div className="space-y-2">
-        {data.connectors.map(connector => {
-    const hasDocPage = connectorPages[connector.name];
-    return <div key={connector.uid} className="grid grid-cols-2 gap-4 border-b border-gray-200 dark:border-gray-700 pb-2">
-              <div className="px-3 py-2 text-sm font-medium text-gray-900 dark:text-white">
-                {hasDocPage ? <a href={hasDocPage} className="text-blue-600 dark:text-blue-400 hover:underline">
-                    {connector.name}
-                  </a> : connector.name}
-              </div>
-              <button type="button" className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400 font-mono cursor-pointer hover:text-gray-700 dark:hover:text-gray-200 transition-colors relative group text-left" onClick={() => copyToClipboard(connector.uid)} onKeyDown={e => e.key === 'Enter' && copyToClipboard(connector.uid)}>
-                <span className="underline decoration-dotted decoration-1 underline-offset-2">
-                  {connector.uid}
-                </span>
-                {}
-                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10">
-                  Click to copy UUID
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
-                </div>
-                {}
-                {copiedUuid === connector.uid && <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-xs px-2 py-1 rounded opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10">
-                    Copied! ✓
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-green-600"></div>
-                  </div>}
-              </button>
-            </div>;
-  })}
-      </div>
-    </div>;
-};
-
-Connectors link Manus to your other tools and services, like Gmail, Google Calendar, and Notion. This allows Manus to access information and perform actions on your behalf, turning it into a central hub for your workflows. By integrating these platforms, you can automate tasks and manage your work more efficiently.
-
-## Popular Connectors
-
-<CardGroup cols={3}>
-  <Card title="Gmail" href="/connectors/gmail">
-    Connect your Gmail account to manage emails with AI assistance
-  </Card>
-
-  <Card title="Google Calendar" href="/connectors/google-calendar">
-    Integrate with Google Calendar for intelligent scheduling
-  </Card>
-
-  <Card title="Notion" href="/connectors/notion">
-    Connect your Notion workspace for AI-powered knowledge management
-  </Card>
-</CardGroup>
+Connectors allow you to link external apps and services to Manus, enabling the agent to access your data and perform actions on your behalf.
 
 ## Setup
 
-You can set up your integrations from [manus.im](https://manus.im) using secure OAuth authentication. Each connector uses industry-standard OAuth protocols to ensure your data remains secure and private.
+Before using a connector via the API, authorize it in the Manus web app:
 
-## All Available Connectors
+1. Go to your [integrations page](https://manus.im/app/settings/integrations) on manus.im.
+2. Click the connector you want to add and complete the OAuth flow.
+3. Once connected, use its UUID in your API requests.
 
-<Card title="Supported Connectors">
-  The table below lists all supported connectors. We're constantly adding more. Click a connector's name for its documentation, or click its UUID to copy it.
-</Card>
+## Using Connectors in the API
 
-<ConnectorTable />
+Pass connector UUIDs in the `connectors` array of the `message` object when creating a task:
 
-To use a connector, copy its UUID and include it in the `connectors` array of your API request. For an example, see the [Create Task](/api-reference/create-task) page.
+```bash
+curl -X POST https://api.manus.ai/v2/task.create \
+  -H "Content-Type: application/json" \
+  -H "x-manus-api-key: $MANUS_API_KEY" \
+  -d '{
+    "message": {
+      "content": "Check my inbox for anything urgent and summarize it",
+      "connectors": ["9444d960-ab7e-450f-9cb9-b9467fb0adda"]
+    }
+  }'
+```
+
+You can pass multiple connectors in a single task:
+
+```json
+{
+  "message": {
+    "content": "Check my calendar for tomorrow and email a summary to john@example.com",
+    "connectors": [
+      "9444d960-ab7e-450f-9cb9-b9467fb0adda",
+      "dd5abf31-7ad3-4c0b-9b9a-f0a576645baf"
+    ]
+  }
+}
+```
+
+## Available Connectors
+
+You can also retrieve available connectors programmatically via [`connector.list`](../api-reference/connectors/connector.list.md).
+
+| Connector | UUID |
+|---|---|
+| Slack | `001e6a99-5585-4b3e-b8cb-533fe24d7788` |
+| Notion | `9c27c684-2f4f-4d33-8fcf-51664ea15c00` |
+| Zapier | `433d2fe0-e56d-42b2-8625-9996eab0bb1d` |
+| Asana | `219459c8-f04d-41af-9a0d-6f9159bf9205` |
+| monday.com | `40ecbda4-5aaf-4e95-bf54-679299ea1c19` |
+| Make | `f8405590-5602-4fee-bfd6-f221623e6f72` |
+| Linear | `982c169d-0c89-4dbd-95fd-30b49cc2f71e` |
+| Atlassian | `74d21d62-2ba7-4840-a918-c8327db5c711` |
+| ClickUp | `e08b2bda-a4a6-488a-b397-c72f0923bdf4` |
+| OpenAI | `942ea72c-09f6-46f0-b4b3-f9890a6edbc5` |
+| Supabase | `84ab78ef-139c-48ff-acd4-cba718b8a484` |
+| Vercel | `a50c5d31-af5e-4e01-a992-057663a7ee1f` |
+| Anthropic | `815b5a30-463e-4662-8da7-081e3b5dfc7d` |
+| Neon | `9a0c8590-c0d9-498b-9b3d-bd0df0dbc134` |
+| Google Gemini | `4157dedf-1326-4be8-9295-51416c7dba62` |
+| Prisma Postgres | `4c55391d-38ea-4a36-a670-a59a1c7680cb` |
+| Sentry | `838d5e1c-7dd4-4782-9429-c459126707c7` |
+| Hugging Face | `bdfa81ea-c0ca-4022-bba1-805c48b583c1` |
+| Perplexity | `2a574fdc-89ab-4ad7-b334-e2c156201b6f` |
+| Cohere | `bbec86c8-29f6-4149-9bba-d5c66bd6a701` |
+| HubSpot | `b389f747-6221-41aa-9dbb-732a97a02ea6` |
+| Intercom | `73f5f556-978a-4f8a-85b3-ef2eec4473e5` |
+| ElevenLabs | `23181678-c628-4c53-9a77-36778a36bbe5` |
+| Stripe | `29986b52-7cbb-4d5e-9263-dd0abacaf28d` |
+| Grok | `491cde51-195c-4e72-96ea-8d80557c3b58` |
+| PayPal for Business | `e90398ef-c17d-46e8-86d6-0bd98642cbbb` |
+| OpenRouter | `c55a74cf-a236-4eda-8885-365d336cae4b` |
+| RevenueCat | `a104e1ac-73e5-482f-96e6-8b95f4756f27` |
+| Ahrefs | `305b3b49-32ce-4b2b-a355-3492fe85d17f` |
+| Close | `9b37aa72-4089-4f25-b774-122860ba61fa` |
+| Xero | `7c635638-0b9f-40f4-b5c8-6f2762416d79` |
+| Similarweb | `700c656f-b4a4-4e39-a886-a20782d99b6f` |
+| Dropbox | `2918a878-d84d-47af-94ce-4967b72506f5` |
+| My Browser | `be268223-40b2-4f3c-a907-c12eb1699283` |
+| Flux | `5c305236-d14e-43f7-93ff-b288afd26f09` |
+| Airtable | `d669ca60-22cf-4e16-93d4-845071f9216c` |
+| Dify | `888c4ef0-4ed7-4f8b-ade0-55a86fc531dc` |
+| Kling | `99474cab-58bf-47ae-af0e-43c156703be9` |
+| Gmail | `9444d960-ab7e-450f-9cb9-b9467fb0adda` |
+| Google Calendar | `dd5abf31-7ad3-4c0b-9b9a-f0a576645baf` |
+| Tripo AI | `3db6c7f4-0ce6-4b76-baad-c6e3c4882acd` |
+| Cloudflare | `119e6b13-c2e3-48db-b568-f82191de6b4e` |
+| Google Drive | `f8900a57-4bd7-46cc-83a3-5ebd2420a817` |
+| PostHog | `89dac2c3-74d0-4f94-86d1-0ee6c4566193` |
+| Playwright | `356d5bc1-fb9f-4fa1-babb-05039dc09d63` |
+| n8n | `d6b4170a-4001-450d-823a-287dfd9716a7` |
+| Jam | `45d392d3-d308-4cdb-8a2d-5d249bcec594` |
+| Outlook Mail | `d485c6dd-4939-40fb-9c4a-c9821971468b` |
+| Canva | `c63d86db-4c98-483a-af0c-f94721d7f2a5` |
+| Stripe API | `fb659ead-d821-40cc-ab35-1cad9af13649` |
+| Webflow | `1d489fb9-0601-4ea7-9942-b866657178c1` |
+| Outlook Calendar | `4bca3029-d276-4644-898d-578a723361b2` |
+| Cloudflare API | `80bca437-287e-4407-adf0-1a0b298528e5` |
+| Supabase API | `86a04f98-35cf-4099-9044-ab851a473cf5` |
+| Wix | `d0fa4acf-7cf6-4402-bd84-82a850342a79` |
+| Granola | `0d21d573-1ee0-484b-8e91-aed6534dbb19` |
+| Fireflies | `1b62b634-58e9-4b49-b327-339cc5aaeaf5` |
+| tl;dv | `f7bbbff0-61fe-458b-975a-3e2f6a91269c` |
+| Firecrawl | `abb9ed36-e693-44ab-be3d-1f5c3bb02294` |
+| Todoist | `2900673c-afaa-4dfa-901d-00a6b3f7275e` |
+| Polygon.io | `376008de-cd2a-4bfb-93aa-2652b8585c8e` |
+| ZoomInfo | `d1edd2c7-392f-4132-bcf7-7f86efe1db54` |
+| Mailchimp Marketing | `331ff697-8348-4ed7-a596-7df98740fc1f` |
+| Apollo | `bb2a05d0-d728-48eb-b796-9b71e4f9c9ee` |
+| Metabase | `9fe14dac-4288-4371-91a8-86a36051a865` |
+| Explorium | `3cb9f78b-b53a-49ef-b65e-b56eeddd641d` |
+| Serena | `f7f15fe8-15cf-4fb9-a546-720f16dcf5e6` |
+| JSONBin.io | `c8298c13-6d9a-4847-9f1f-1523952fddbd` |
+| HeyGen | `c183add9-c22c-4199-b7f2-d885571afa3a` |
+| GitHub | `bbb0df76-66bd-4a24-ae4f-2aac4750d90b` |
+| Apify | `cf19c9d0-5f91-4e7a-af04-593febb5c80c` |
+| Sales AI Assistant | `fd15db79-1975-4579-8d0a-cbc72b28fac1` |
+| Spend | `bc3176ba-efd9-427d-8455-fe64483e8940` |
+| Quick Experiments | `7f5d51a1-c7b7-442f-a99b-b176cc71a8e8` |
+| Instagram Creator Marketplace | `9777f7bd-4ca3-431a-98d6-a7ed5221dd81` |
+
+## Default Connectors
+
+When you omit the `connectors` array from your message, Manus automatically resolves which connectors to use:
+
+| `connectors` param | `project_id` | Behavior |
+|---|---|---|
+| Provided | — | Uses the specified connectors |
+| Omitted | Provided | Uses the project's default connectors |
+| Omitted | Omitted | Uses the user's default enabled connectors |
+
+**Priority:** explicit param > project default > user default.
+
+To set your default connectors, visit the [integrations page](https://manus.im/app/settings/integrations) on manus.im and enable the connectors you want to use by default.
+
+## Privacy & Security
+
+All connectors use secure OAuth authentication. Your credentials are never shared with Manus directly. You can revoke access at any time from the [integrations page](https://manus.im/app/settings/integrations) on manus.im.

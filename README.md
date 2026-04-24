@@ -1,18 +1,25 @@
 # Manus API Documentation
 
-Welcome to the **Manus API Documentation** repository. This is a complete Markdown copy of the official Manus API documentation, organized for easy navigation and reference.
+Welcome to the **Manus API Documentation** repository. This is a complete Markdown copy of the official Manus API v2 documentation, organized for easy navigation and reference.
 
 ## 📚 Table of Contents
 
 - [Getting Started](#getting-started)
-- [Webhooks](#webhooks)
 - [API Reference](#api-reference)
   - [Tasks API](#tasks-api)
+  - [Projects API](#projects-api)
+  - [Skills API](#skills-api)
+  - [Agents API](#agents-api)
   - [Files API](#files-api)
   - [Webhooks API](#webhooks-api)
-- [SDK](#sdk)
+  - [Usage API](#usage-api)
+  - [Connectors API](#connectors-api)
+  - [Browser API](#browser-api)
+  - [Website API](#website-api)
+- [Webhooks Guide](#webhooks-guide)
 - [Connectors](#connectors)
 - [Integrations](#integrations)
+- [Data Integrations](#data-integrations)
 - [Repository Structure](#repository-structure)
 
 ---
@@ -21,63 +28,78 @@ Welcome to the **Manus API Documentation** repository. This is a complete Markdo
 
 Learn the basics of the Manus API and make your first API call.
 
-- **[Overview](getting-started/overview.md)** - Introduction to Manus API and its capabilities
-- **[Quickstart](getting-started/quickstart.md)** - Generate an API key and make your first call
-
----
-
-## 🔔 Webhooks
-
-Set up real-time notifications for task lifecycle events.
-
-- **[Webhooks Overview](webhooks/overview.md)** - Real-time notifications for task lifecycle events
-- **[Security](webhooks/security.md)** - Best practices for securing your webhook endpoints with RSA-SHA256 signatures
+- **[Overview](getting-started/overview.md)** - Introduction to Manus API v2 and its capabilities
+- **[Authentication](getting-started/authentication.md)** - Create and use API keys
+- **[Task Lifecycle](getting-started/task-lifecycle.md)** - Poll task status, handle confirmations, and process results
+- **[Agents](getting-started/agents.md)** - Interact with agents and their tasks via the API
+- **[Website](getting-started/website.md)** - Manage websites built by Manus agents
+- **[Rate Limits](getting-started/rate-limits.md)** - Per-user request limits for v2 endpoints
 
 ---
 
 ## 📖 API Reference
 
-Complete API endpoint specifications for all Manus API resources.
+Complete API endpoint specifications for all Manus API v2 resources.
 
 ### Tasks API
-
 Manage AI tasks with the Manus API.
+- [Create Task](api-reference/tasks/task.create.md) (`POST /v2/task.create`)
+- [Get Task Detail](api-reference/tasks/task.detail.md) (`GET /v2/task.detail`)
+- [List Tasks](api-reference/tasks/task.list.md) (`GET /v2/task.list`)
+- [Update Task](api-reference/tasks/task.update.md) (`POST /v2/task.update`)
+- [Stop Task](api-reference/tasks/task.stop.md) (`POST /v2/task.stop`)
+- [Delete Task](api-reference/tasks/task.delete.md) (`POST /v2/task.delete`)
+- [Send Message](api-reference/tasks/task.sendMessage.md) (`POST /v2/task.sendMessage`)
+- [List Messages](api-reference/tasks/task.listMessages.md) (`GET /v2/task.listMessages`)
+- [Confirm Action](api-reference/tasks/task.confirmAction.md) (`POST /v2/task.confirmAction`)
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| [Create Task](api-reference/tasks/create-task.md) | `POST /v1/tasks` | Create a new AI task with custom parameters and attachments |
-| [Get Tasks](api-reference/tasks/get-tasks.md) | `GET /v1/tasks` | Retrieve a list of tasks with filtering and pagination |
-| [Get Task](api-reference/tasks/get-task.md) | `GET /v1/tasks/{task_id}` | Retrieve details of a specific task |
-| [Update Task](api-reference/tasks/update-task.md) | `PUT /v1/tasks/{task_id}` | Update an existing task |
-| [Delete Task](api-reference/tasks/delete-task.md) | `DELETE /v1/tasks/{task_id}` | Delete a specific task |
+### Projects API
+- [Create Project](api-reference/projects/project.create.md) (`POST /v2/project.create`)
+- [List Projects](api-reference/projects/project.list.md) (`GET /v2/project.list`)
+
+### Skills API
+- [List Skills](api-reference/skills/skill.list.md) (`GET /v2/skill.list`)
+
+### Agents API
+- [List Agents](api-reference/agents/agent.list.md) (`GET /v2/agent.list`)
+- [Get Agent Detail](api-reference/agents/agent.detail.md) (`GET /v2/agent.detail`)
+- [Update Agent](api-reference/agents/agent.update.md) (`POST /v2/agent.update`)
 
 ### Files API
-
-Upload and manage files for use in tasks.
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| [Create File](api-reference/files/create-file.md) | `POST /v1/files` | Upload a new file and get a presigned upload URL |
-| [List Files](api-reference/files/list-files.md) | `GET /v1/files` | Retrieve a list of uploaded files |
-| [Get File](api-reference/files/get-file.md) | `GET /v1/files/{file_id}` | Retrieve details of a specific file |
-| [Delete File](api-reference/files/delete-file.md) | `DELETE /v1/files/{file_id}` | Delete a specific file |
+- [Upload File](api-reference/files/file.upload.md) (`POST /v2/file.upload`)
+- [Get File Detail](api-reference/files/file.detail.md) (`GET /v2/file.detail`)
+- [Delete File](api-reference/files/file.delete.md) (`POST /v2/file.delete`)
 
 ### Webhooks API
+- [Create Webhook](api-reference/webhooks/webhook.create.md) (`POST /v2/webhook.create`)
+- [List Webhooks](api-reference/webhooks/webhook.list.md) (`GET /v2/webhook.list`)
+- [Delete Webhook](api-reference/webhooks/webhook.delete.md) (`POST /v2/webhook.delete`)
+- [Get Public Key](api-reference/webhooks/webhook.publicKey.md) (`GET /v2/webhook.publicKey`)
 
-Register and manage webhook endpoints for real-time notifications.
+### Usage API
+- [List Usage](api-reference/usage/usage.list.md) (`GET /v2/usage.list`)
+- [Team Statistic](api-reference/usage/usage.teamStatistic.md) (`GET /v2/usage.teamStatistic`)
+- [Team Log](api-reference/usage/usage.teamLog.md) (`GET /v2/usage.teamLog`)
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| [Create Webhook](api-reference/webhooks/create-webhook.md) | `POST /v1/webhooks` | Register a webhook to receive real-time notifications |
-| [Delete Webhook](api-reference/webhooks/delete-webhook.md) | `DELETE /v1/webhooks/{webhook_id}` | Remove a previously registered webhook |
+### Connectors API
+- [List Connectors](api-reference/connectors/connector.list.md) (`GET /v2/connector.list`)
+
+### Browser API
+- [List Online Browsers](api-reference/browser/browser.onlineList.md) (`GET /v2/browser.onlineList`)
+
+### Website API
+- [Website Status](api-reference/website/website.status.md) (`GET /v2/website.status`)
+- [List Checkpoints](api-reference/website/website.listCheckpoints.md) (`GET /v2/website.listCheckpoints`)
+- [Publish Website](api-reference/website/website.publish.md) (`POST /v2/website.publish`)
 
 ---
 
-## 🛠 SDK
+## 🔔 Webhooks Guide
 
-Integration guides for using Manus API with popular SDKs.
+Set up real-time notifications for task lifecycle events.
 
-- **[OpenAI SDK Compatibility](sdk/openai-compatibility.md)** - Use the OpenAI Python SDK with Manus for complex reasoning tasks
+- **[Overview](webhooks/overview.md)** - Real-time notifications for task lifecycle events
+- **[Security](webhooks/security.md)** - Verify webhook signatures to ensure requests are from Manus
 
 ---
 
@@ -85,10 +107,7 @@ Integration guides for using Manus API with popular SDKs.
 
 Connect Manus with external services to enhance your workflows.
 
-- **[Connectors Overview](connectors/overview.md)** - Introduction to Manus connectors
-- **[Gmail](connectors/gmail.md)** - Connect Manus with Gmail
-- **[Notion](connectors/notion.md)** - Connect Manus with Notion
-- **[Google Calendar](connectors/google-calendar.md)** - Connect Manus with Google Calendar
+- **[Overview](connectors/overview.md)** - Connect external apps to Manus and use them in API tasks
 
 ---
 
@@ -96,8 +115,17 @@ Connect Manus with external services to enhance your workflows.
 
 Integrate Manus into your favorite platforms.
 
-- **[Integrations Overview](integrations/overview.md)** - Introduction to Manus integrations
-- **[Slack](integrations/slack.md)** - Integrate Manus with Slack
+- **[Overview](integrations/overview.md)** - Use Manus from your favorite apps
+- **[Slack](integrations/slack.md)** - Start sessions directly from Slack channels or DM the Manus bot
+
+---
+
+## 📊 Data Integrations
+
+Access built-in third-party data directly in Manus.
+
+- **[Overview](data-integrations/overview.md)** - Access built-in third-party data directly in Manus
+- **[Similarweb](data-integrations/similarweb.md)** - Access website traffic and digital market intelligence data
 
 ---
 
@@ -105,24 +133,11 @@ Integrate Manus into your favorite platforms.
 
 For a detailed view of the repository structure, see [STRUCTURE.md](STRUCTURE.md).
 
-```
-ManusAPIDocs/
-├── getting-started/          # Getting started guides
-├── webhooks/                 # Webhooks documentation
-├── api-reference/            # API endpoints reference
-│   ├── tasks/               # Task management endpoints
-│   ├── files/               # File management endpoints
-│   └── webhooks/            # Webhook management endpoints
-├── sdk/                     # SDK documentation
-├── connectors/              # Connectors documentation
-└── integrations/            # Integrations documentation
-```
-
 ---
 
 ## 📌 Additional Resources
 
-- **Official Documentation**: [https://open.manus.ai/docs/](https://open.manus.ai/docs/)
+- **Official Documentation**: [https://open.manus.ai/docs/v2/](https://open.manus.ai/docs/v2/)
 - **Manus Website**: [https://manus.im/](https://manus.im/)
 - **API Base URL**: `https://api.manus.ai`
 
@@ -140,4 +155,4 @@ This is a mirror repository for reference purposes. For updates or corrections, 
 
 ---
 
-**Last Updated**: November 16, 2025
+**Last Updated**: April 24, 2026
